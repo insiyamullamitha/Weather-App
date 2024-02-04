@@ -4,6 +4,11 @@ import axios from "axios";
 const Weather = () => {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
+  const [searchInputTop, setSearchInputTop] = useState("50%");
+
+  const moveSearchInput = () => {
+    setSearchInputTop("0");
+  };
 
   const fetchWeather = async () => {
     try {
@@ -13,6 +18,9 @@ const Weather = () => {
       setWeather(response.data);
     } catch (error) {
       console.error(error);
+      alert("City not found");
+      setWeather(null);
+      setCity("");
     }
   };
   const handleSubmit = (event) => {
@@ -27,12 +35,20 @@ const Weather = () => {
             type="text"
             value={city}
             onChange={(event) => setCity(event.target.value)}
+            placeholder="Enter city"
+            className="weather-input"
+            style={{ top: searchInputTop }}
           />
-          <button type="submit">Get Weather</button>
+          <button
+            className="search-button"
+            type="submit"
+            onClick={moveSearchInput}
+          >
+            Get Weather
+          </button>
         </form>
         {weather && (
-          <div>
-            <h1>{weather.name}</h1>
+          <div className="weather-info">
             <p>{weather.weather[0].description}</p>
             <p>Temperature: {Math.round(weather.main.temp - 273.15)}°C</p>
           </div>
